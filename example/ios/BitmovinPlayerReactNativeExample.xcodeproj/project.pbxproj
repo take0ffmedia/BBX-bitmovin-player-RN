@@ -138,7 +138,7 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 423Q26AEEM;
+						DevelopmentTeam = 7UXPEM3WRB;
 						LastSwiftMigration = 1330;
 						ProvisioningStyle = Automatic;
 					};
@@ -279,7 +279,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 423Q26AEEM;
+				DEVELOPMENT_TEAM = 7UXPEM3WRB;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = BitmovinPlayerReactNativeExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -310,7 +310,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 423Q26AEEM;
+				DEVELOPMENT_TEAM = 7UXPEM3WRB;
 				INFOPLIST_FILE = BitmovinPlayerReactNativeExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
