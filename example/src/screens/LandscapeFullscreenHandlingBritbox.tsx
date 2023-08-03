@@ -1,5 +1,12 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import React, { useCallback, useReducer, useRef, useState } from 'react';
+import {
+  Modal,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import {
@@ -14,6 +21,8 @@ import { useTVGestures } from '../hooks';
 import { RootStackParamsList } from '../App';
 import Orientation from 'react-native-orientation-locker';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
+import Button from '../components/Button';
+import FormInput from '../components/FormInput';
 
 type LandscapeFullscreenHandlingProps = NativeStackScreenProps<
   RootStackParamsList,
@@ -23,6 +32,41 @@ type LandscapeFullscreenHandlingProps = NativeStackScreenProps<
 function prettyPrint(header: string, obj: any) {
   console.log(header, JSON.stringify(obj, null, 2));
 }
+
+interface State {
+  parentalControl: string;
+}
+
+enum FormAction {
+  SET_PARENTAL_CONTROL = 'SET_PARENTAL_CONTROL',
+}
+
+interface Action {
+  type: FormAction;
+  payload: any;
+}
+function formReducer(state: State, action: Action): State {
+  const { type, payload } = action;
+  let newState = state;
+
+  switch (type) {
+    case FormAction.SET_PARENTAL_CONTROL:
+      newState = { ...newState, parentalControl: payload as string };
+      break;
+  }
+
+  return newState;
+}
+
+const setParentalControl = (payload: string): Action => ({
+  type: FormAction.SET_PARENTAL_CONTROL,
+  payload,
+});
+
+// initial state
+const initialFormState = {
+  parentalControl: '',
+};
 
 class SampleFullscreenHandler implements FullscreenHandler {
   isFullscreenActive: boolean = true;
@@ -78,6 +122,8 @@ export default function LandscapeFullscreenHandling({
   });
 
   const [fullscreenMode, setFullscreenMode] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [state, dispatch] = useReducer(formReducer, initialFormState);
   const fullscreenHandler = useRef(
     new SampleFullscreenHandler(fullscreenMode, (isFullscreen: boolean) => {
       console.log('on fullscreen change');
@@ -103,12 +149,13 @@ export default function LandscapeFullscreenHandling({
       player.load({
         url:
           Platform.OS === 'ios'
-            ? 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8'
-            : 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd',
+            ? 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8'
+            : 'https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd',
+
         type: Platform.OS === 'ios' ? SourceType.HLS : SourceType.DASH,
-        title: 'Art of Motion',
+        title: 'Sintel',
         poster:
-          'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/poster.jpg',
+          'https://www.cartoonbrew.com/wp-content/uploads/2014/04/sintel-sony-1280x600.jpg',
       });
       return () => {
         player.destroy();
@@ -131,8 +178,35 @@ export default function LandscapeFullscreenHandling({
     setFullscreenMode(false);
   }, []);
 
+  const loadVideo = useCallback(() => {
+    player.load({
+      url:
+        Platform.OS === 'ios'
+          ? 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8'
+          : 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd',
+      type: Platform.OS === 'ios' ? SourceType.HLS : SourceType.DASH,
+
+      title: 'Art of Motion',
+      poster:
+        'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/poster.jpg',
+    });
+  }, [player]);
+
   return (
     <View style={styles.container}>
+      <View style={styles.button}>
+        <Button type="solid" onPress={() => navigation.goBack()} title="Back" />
+      </View>
+      <View style={[styles.button, { marginTop: 140 }]}>
+        <Button
+          type="solid"
+          onPress={() => {
+            player.pause();
+            setIsVisible(true);
+          }}
+          title="Next Episode"
+        />
+      </View>
       <PlayerView
         player={player}
         isFullscreenRequested={fullscreenMode}
@@ -145,6 +219,37 @@ export default function LandscapeFullscreenHandling({
         onPlayerError={onError}
         onSourceError={onError}
       />
+      <Modal
+        visible={isVisible}
+        animationType="fade"
+        presentationStyle="fullScreen"
+      >
+        <View style={styles.button}>
+          <Button
+            type="solid"
+            onPress={() => {
+              setIsVisible(false);
+            }}
+            title="Close Modal"
+          />
+        </View>
+        <View style={styles.modal}>
+          <Text>Modal</Text>
+          <FormInput
+            title="Parental Control"
+            value={state.parentalControl}
+            onChange={(value) => dispatch(setParentalControl(value))}
+          />
+          <Button
+            type="solid"
+            onPress={() => {
+              setIsVisible(false);
+              loadVideo();
+            }}
+            title="Done"
+          />
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -157,6 +262,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
   },
+  button: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    marginVertical: 80,
+    marginHorizontal: 20,
+    zIndex: 1,
+  },
   player: {
     flex: 1,
     backgroundColor: 'black',
@@ -168,5 +281,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     backgroundColor: 'black',
+  },
+  modal: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

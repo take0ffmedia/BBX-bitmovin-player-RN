@@ -21,13 +21,13 @@ const Button: React.FC<ButtonProps> = ({
     containerStyle,
     {
       opacity: disabled ? 0.5 : 1,
-      backgroundColor: type === 'outlined' ? 'transparent' : 'black',
+      backgroundColor: type === 'outlined' ? 'transparent' : 'white',
     },
   ]);
   const buttonTitleStyle = StyleSheet.flatten([
     styles.buttonTitle,
     {
-      color: type === 'outlined' ? 'black' : 'white',
+      color: type === 'outlined' ? 'black' : 'black',
     },
   ]);
   return (
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonTitle: {
-    color: 'black',
+    color: 'white',
     margin: 5,
     fontSize: 15,
     fontWeight: '600',

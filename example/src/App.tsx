@@ -6,18 +6,19 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SourceType } from 'bitmovin-player-react-native';
 import Button from './components/Button';
 import ExamplesList from './screens/ExamplesList';
-import BasicAds from './screens/BasicAds';
-import BasicAnalytics from './screens/BasicAnalytics';
-import BasicPlayback from './screens/BasicPlayback';
-import BasicDrmPlayback from './screens/BasicDrmPlayback';
-import SubtitlePlayback from './screens/SubtitlePlayback';
-import ProgrammaticTrackSelection from './screens/ProgrammaticTrackSelection';
-import CustomPlaybackForm from './screens/CustomPlaybackForm';
-import CustomPlayback from './screens/CustomPlayback';
-import BasicPictureInPicture from './screens/BasicPictureInPicture';
-import CustomHtmlUi from './screens/CustomHtmlUi';
+// import BasicAds from './screens/BasicAds';
+// import BasicAnalytics from './screens/BasicAnalytics';
+// import BasicPlayback from './screens/BasicPlayback';
+// import BasicDrmPlayback from './screens/BasicDrmPlayback';
+// import SubtitlePlayback from './screens/SubtitlePlayback';
+// import ProgrammaticTrackSelection from './screens/ProgrammaticTrackSelection';
+// import CustomPlaybackForm from './screens/CustomPlaybackForm';
+// import CustomPlayback from './screens/CustomPlayback';
+// import BasicPictureInPicture from './screens/BasicPictureInPicture';
+// import CustomHtmlUi from './screens/CustomHtmlUi';
 import BasicFullscreenHandling from './screens/BasicFullscreenHandling';
 import LandscapeFullscreenHandling from './screens/LandscapeFullscreenHandling';
+import LandscapeFullscreenHandlingBritbox from './screens/LandscapeFullscreenHandlingBritbox';
 
 export type RootStackParamsList = {
   ExamplesList: {
@@ -29,6 +30,7 @@ export type RootStackParamsList = {
   BasicAds: undefined;
   BasicAnalytics: undefined;
   BasicPlayback: undefined;
+  BasicPlaybackLandscape: undefined;
   BasicDrmPlayback: undefined;
   BasicPictureInPicture: undefined;
   BasicFullscreenHandling: {
@@ -54,57 +56,61 @@ export type RootStackParamsList = {
 
 const RootStack = createNativeStackNavigator();
 
-const isTVOS = Platform.OS === 'ios' && Platform.isTV;
+// const isTVOS = Platform.OS === 'ios' && Platform.isTV;
 
 export default function App() {
   const stackParams = {
     data: [
-      {
-        title: 'Basic playback',
-        routeName: 'BasicPlayback',
-      },
-      {
-        title: 'Basic Analytics',
-        routeName: 'BasicAnalytics',
-      },
-      {
-        title: 'Basic Drm playback',
-        routeName: 'BasicDrmPlayback',
-      },
-      {
-        title: 'Subtitle and captions',
-        routeName: 'SubtitlePlayback',
-      },
-      {
-        title: 'Basic Picture in Picture',
-        routeName: 'BasicPictureInPicture',
-      },
-      {
-        title: 'Basic Ads',
-        routeName: 'BasicAds',
-      },
-      {
-        title: 'Programmatic Track Selection',
-        routeName: 'ProgrammaticTrackSelection',
-      },
+      // {
+      //   title: 'Basic playback',
+      //   routeName: 'BasicPlayback',
+      // },
+      // {
+      //   title: 'Basic Analytics',
+      //   routeName: 'BasicAnalytics',
+      // },
+      // {
+      //   title: 'Basic Drm playback',
+      //   routeName: 'BasicDrmPlayback',
+      // },
+      // {
+      //   title: 'Subtitle and captions',
+      //   routeName: 'SubtitlePlayback',
+      // },
+      // {
+      //   title: 'Basic Picture in Picture',
+      //   routeName: 'BasicPictureInPicture',
+      // },
+      // {
+      //   title: 'Basic Ads',
+      //   routeName: 'BasicAds',
+      // },
+      // {
+      //   title: 'Programmatic Track Selection',
+      //   routeName: 'ProgrammaticTrackSelection',
+      // },
     ],
   };
 
-  if (!isTVOS) {
-    stackParams.data.push({
-      title: 'Custom HTML UI',
-      routeName: 'CustomHtmlUi',
-    });
-  }
+  // if (!isTVOS) {
+  //   stackParams.data.push({
+  //     title: 'Custom HTML UI',
+  //     routeName: 'CustomHtmlUi',
+  //   });
+  // }
 
   if (!Platform.isTV) {
-    stackParams.data.push({
-      title: 'Basic Fullscreen handling',
-      routeName: 'BasicFullscreenHandling',
-    });
+    // stackParams.data.push({
+    //   title: 'Basic Fullscreen handling',
+    //   routeName: 'BasicFullscreenHandling',
+    // });
     stackParams.data.push({
       title: 'Landscape Fullscreen handling',
       routeName: 'LandscapeFullscreenHandling',
+    });
+    stackParams.data.push({
+      title: 'Landscape Fullscreen Britbox',
+      routeName: 'LandscapeFullscreenHandlingBritbox',
     });
   }
 
@@ -133,6 +139,7 @@ export default function App() {
           })}
           initialParams={stackParams}
         />
+        {/* 
         <RootStack.Screen
           name="BasicAds"
           component={BasicAds}
@@ -184,7 +191,7 @@ export default function App() {
             component={CustomHtmlUi}
             options={{ title: 'Custom HTML UI' }}
           />
-        )}
+        )} */}
         {!Platform.isTV && (
           <RootStack.Screen
             name="BasicFullscreenHandling"
@@ -197,6 +204,13 @@ export default function App() {
             name="LandscapeFullscreenHandling"
             component={LandscapeFullscreenHandling}
             options={{ title: 'Lanscape Fullscreen Handling' }}
+          />
+        )}
+        {!Platform.isTV && (
+          <RootStack.Screen
+            name="LandscapeFullscreenHandlingBritbox"
+            component={LandscapeFullscreenHandlingBritbox}
+            options={{ title: 'Lanscape Fullscreen Britbox' }}
           />
         )}
       </RootStack.Navigator>
