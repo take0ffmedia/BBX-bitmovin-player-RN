@@ -17,8 +17,18 @@ export default function BasicPlayback() {
   useTVGestures();
 
   const player = usePlayer({
-    remoteControlConfig: {
-      isCastEnabled: false,
+    licenseKey: 'LICENCE_KEY',
+    styleConfig: {
+      playerUiCss:
+        'https://cdn.statically.io/gh/bitmovin/bitmovin-player-ios-samples/main/CustomHtmlUi/Supporting%20Files/bitmovinplayer-ui.min.css',
+      playerUiJs:
+        'https://cdn.statically.io/gh/bitmovin/bitmovin-player-ios-samples/main/CustomHtmlUi/Supporting%20Files/bitmovinplayer-ui.min.js',
+    },
+    playbackConfig: {
+      isAutoplayEnabled: true,
+    },
+    tweaksConfig: {
+      updatesNowPlayingInfoCenter: false,
     },
   });
 
