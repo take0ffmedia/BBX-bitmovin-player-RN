@@ -18,6 +18,7 @@ export default function BasicPictureInPicture() {
   useTVGestures();
 
   const player = usePlayer({
+    licenseKey: 'LICENSE_KEY',
     playbackConfig: {
       // Enable picture in picture UI option on player controls.
       isPictureInPictureEnabled: true,
@@ -43,7 +44,8 @@ export default function BasicPictureInPicture() {
       player.load({
         url:
           Platform.OS === 'ios'
-            ? 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8'
+            ? // TODO: Replace this URL with the updated URL
+              'https://vod-hls-ntham-comm.live.cf.md.bbci.co.uk/usp/auth/vod/piff_abr_full_hd/c35a1b-p09pz01c/vf_p09pz01c_5a49a126-cbd5-46fd-8e7c-e8b6c6685257.ism/mobile_wifi_main_sd_abr_v2_hls_master.m3u8?Expires=1726619408&Signature=jJIeprDXiYDp6uSc2S~sX78PquboG5iul3MUXt-DLnXe54AK-tCwRN66gwGknQhVvNC6e5O4XsGXbLwBkeCNbvNOkMM7d2VoKMXNwXKiPtAQmI~bpxsdGpyCj5OWAGhC6xrrzY0SLZ~ncNrm-EMobTJNoNdNINgHTcwxp2pZyCDuWnL8y03LlNBqkt8dNCEU3atbfp9zOK4Tys~qV84~7M33pZso7l3JBhf4rsP0Akx8VoMkOBLru55MSYs2uptIf-7PwjXwo2uKYlctIqe~ZaHjYlYoUPnaadDcRF4EvEdYxMcgaeLevAFVgGOW7sRJkE6UPn4lYJOly-dyW9Oy2g__&Key-Pair-Id=K2VWLYKQ4HU1FJ'
             : 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd',
         type: Platform.OS === 'ios' ? SourceType.HLS : SourceType.DASH,
         title: 'Art of Motion',
@@ -60,6 +62,10 @@ export default function BasicPictureInPicture() {
     prettyPrint(`[${event.name}]`, event);
   }, []);
 
+  const onEventError = (event: Event) => {
+    prettyPrint(`[${event.name}]`, event);
+  };
+
   return (
     <View style={styles.container}>
       <PlayerView
@@ -70,6 +76,7 @@ export default function BasicPictureInPicture() {
         onPictureInPictureEntered={onEvent}
         onPictureInPictureExit={onEvent}
         onPictureInPictureExited={onEvent}
+        onSourceError={onEventError}
       />
     </View>
   );
